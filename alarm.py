@@ -4,6 +4,7 @@ from config import CONFIG
 
 import datetime
 from os import popen, path
+import pygame
 import random
 from time import sleep
 
@@ -47,14 +48,36 @@ def day_names(day):
     ['sunday', 'weekend']
   ][day]
 
-while True:
-  sleep(1)
+# () -> Bool
+song_is_playing = pygame.mixer.music.get_busy
+
+# () -> Bool
+def alarm_time():
+  for day_name in day_names(day_of_week()):
+    if (day_name, hour(), minute()) in CONFIG['alarms']:
+      return True
+
+  return False
+
+# () -> [FilePath]
+def random_playlist():
   artist = select_subdirectory(CONFIG['music_path'])
   album = select_subdirectory(artist)
-  playlist = directory_to_playlist(album)
-  print album
-  print playlist
-#  print directory_to_playlist('/home/michael/Audio/Music/Sufjan Stevens/Illinois')
-#  for day_name in day_names(day_of_week()):
-#    if (day_name, hour(), minute()) in CONFIG['alarms']:
-#      print 'alarm hit'
+  return directory_to_playlist(album)
+
+# [FilePath] -> [FilePath]
+def pop_and_play(playlist):
+  song = playlist[0]
+  pygame.mixer.music.load(song)
+  pygame.mixer.music.play()
+  return playlist[1:]
+
+playlist = []
+pygame.init()
+
+while True:
+  sleep(1)
+  if not playlist and alarm_time():
+    playlist = random_playlist()
+  elif playlist and not song_is_playing():
+    playlist = pop_and_play(playlist)
