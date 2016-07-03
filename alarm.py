@@ -8,12 +8,9 @@ import pygame
 import random
 from time import sleep
 
-# [String]
-PLAYABLE_MUSIC_EXTENSIONS = ['.mp3'] # does wma work?
-
 # FilePath -> Bool
 def is_playable_music_file(filename):
-  return len([i for i in PLAYABLE_MUSIC_EXTENSIONS if filename.endswith(i)])
+  return filename.endswith('.mp3')
 
 # () -> Int
 day_of_week = datetime.datetime.today().weekday
@@ -80,4 +77,5 @@ while True:
   if not playlist and alarm_time():
     playlist = random_playlist()
   elif playlist and not song_is_playing():
+    print 'playing'
     playlist = pop_and_play(playlist)
