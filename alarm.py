@@ -62,15 +62,19 @@ def random_playlist():
   album = select_subdirectory(artist)
   return directory_to_playlist(album)
 
+pygame_initialized = False
+
 # [FilePath] -> [FilePath]
 def pop_and_play(playlist):
   song = playlist[0]
+  if not pygame_initialized:
+    pygame.init()
+    pygame_initialized = True
   pygame.mixer.music.load(song)
   pygame.mixer.music.play()
   return playlist[1:]
 
 playlist = []
-pygame.init()
 
 while True:
   sleep(1)

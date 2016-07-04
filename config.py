@@ -1,6 +1,6 @@
 CONFIG = {
-  'music_path': '/home/michael/Audio/Music',
+  'music_path': '/home/pi/Music',
   'alarms': [
-    ('weekdays', 5, 30)
+    ('monday', 12, 0)
   ]
 }
